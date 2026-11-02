@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LibreDesk 在线聊天测试</title>
+  <style>
+    body { margin: 0; padding: 48px 24px; font: 16px/1.6 system-ui, sans-serif; color: #1f2937; background: #f5f7fb; }
+    main { max-width: 680px; margin: auto; padding: 32px; border-radius: 12px; background: white; box-shadow: 0 4px 24px #0001; }
+    h1 { margin-top: 0; font-size: 24px; }
+    button { padding: 10px 18px; border: 0; border-radius: 8px; color: white; background: #2563eb; cursor: pointer; }
+    #status { color: #475569; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>LibreDesk 在线聊天测试</h1>
+    <p>点击页面右下角的聊天按钮，或使用下面的按钮打开聊天窗口，然后发送一条测试消息。</p>
+    <button id="open-chat" type="button">打开聊天窗口</button>
+    <p id="status" role="status">正在加载聊天脚本……</p>
+  </main>
+
+  <script>
+    window.LibredeskSettings = {
+      baseURL: 'http://172.104.187.146:9000',
+      inboxID: 'a5f31cd3-a85a-48dc-8561-924331b24d31'
+    };
+
+    const status = document.getElementById('status');
+    document.getElementById('open-chat').addEventListener('click', () => {
+      if (window.Libredesk && typeof window.Libredesk.show === 'function') {
+        window.Libredesk.show();
+      } else {
+        status.textContent = '聊天组件尚未初始化，请稍后重试并检查浏览器控制台。';
+      }
+    });
+
+    function widgetScriptLoaded() {
+      status.textContent = '聊天脚本已加载，请等待右下角的聊天按钮出现。';
+    }
+
+    function widgetScriptFailed() {
+      status.textContent = '聊天脚本加载失败，请检查服务地址、网络和服务器端口。';
+    }
+  </script>
+  <script async src="http://172.104.187.146:9000/widget.js" onload="widgetScriptLoaded()" onerror="widgetScriptFailed()"></script>
+</body>
+</html>
